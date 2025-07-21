@@ -1,0 +1,6 @@
+@PubQuizMediaServer_HostAddress = http://localhost:5162
+
+GET {{PubQuizMediaServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
