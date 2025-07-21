@@ -1,13 +1,14 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
 using PubQuizMediaServer.Util;
 using PubQuizMediaServer.Util.Handler;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedOrigins = new[] { "https://192.168.0.187", "https://localhost:7147", "https://localhost:7148" };
+
+Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
 builder.Services.AddControllers();
 
@@ -24,8 +25,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -34,12 +35,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudiences = new[]
-            {
+            ValidAudiences =
+            [
                 builder.Configuration["Jwt:Audience:Admin"],
                 builder.Configuration["Jwt:Audience:Organizer"],
                 builder.Configuration["Jwt:Audience:Attendee"]
-            },
+            ],
+
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
         };

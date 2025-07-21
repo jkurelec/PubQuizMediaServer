@@ -8,7 +8,7 @@ namespace PubQuizMediaServer.Util
     {
         private const long MaxImageSize = 10 * 1024 * 1024;
 
-        public static async Task<string> SaveProfileImageAsync(IFormFile image, string folderPath, string fileName)
+        public static async Task<string> SaveProfileImageAsync(IFormFile image, string folderPath)
         {
             if (image == null || image.Length == 0)
                 throw new ArgumentException("Invalid image file.");
@@ -36,11 +36,14 @@ namespace PubQuizMediaServer.Util
 
             Directory.CreateDirectory(folderPath);
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (string.IsNullOrWhiteSpace(image.FileName))
                 throw new BadRequestException("File name is empty!");
 
-            var filePath = Path.Combine(folderPath, fileName);
-            var backupFilePath = Path.Combine(folderPath, "old" + fileName);
+            var baseFileName = Path.GetFileNameWithoutExtension(image.FileName);
+            var finalFileName = baseFileName + ".jpg";
+
+            var filePath = Path.Combine(folderPath, finalFileName);
+            var backupFilePath = Path.Combine(folderPath, "old" + finalFileName);
 
             if (File.Exists(filePath))
             {
@@ -70,7 +73,7 @@ namespace PubQuizMediaServer.Util
                 throw;
             }
 
-            return fileName;
+            return finalFileName;
         }
     }
 }
