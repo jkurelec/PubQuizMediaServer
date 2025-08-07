@@ -3,6 +3,7 @@ using PubQuizMediaServer.Util;
 using PubQuizMediaServer.Util.Handler;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using PubQuizMediaServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,10 @@ builder.Services.AddAuthentication("Bearer")
 //    // You can add roles or claims checks here
 //    );
 //});
+
+builder.Services.AddHttpClient<QuestionMediaPermissionCache>();
+builder.Services.AddSingleton<QuestionMediaPermissionCache>();
+builder.Services.AddHostedService<PermissionUpdateService>();
 
 var app = builder.Build();
 

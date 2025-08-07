@@ -15,7 +15,7 @@ namespace PubQuizMediaServer.Controllers
             if (!User.IsBackend())
                 return Unauthorized();
 
-            var newFileName = await ImageSanitazer.SaveProfileImageAsync(image, MediaPaths.Public.Organization);
+            var newFileName = await ImageSanitazer.SaveProfileImage(image, MediaPaths.Public.Organization);
 
             return Ok(newFileName);
         }
@@ -26,7 +26,18 @@ namespace PubQuizMediaServer.Controllers
             if (!User.IsBackend())
                 return Unauthorized();
 
-            var newFileName = await ImageSanitazer.SaveProfileImageAsync(image, MediaPaths.Public.Quiz);
+            var newFileName = await ImageSanitazer.SaveProfileImage(image, MediaPaths.Public.Quiz);
+
+            return Ok(newFileName);
+        }
+
+        [HttpPost("update/edition")]
+        public async Task<IActionResult> UpdateEdition(IFormFile image)
+        {
+            if (!User.IsBackend())
+                return Unauthorized();
+
+            var newFileName = await ImageSanitazer.SaveProfileImage(image, MediaPaths.Public.Edition);
 
             return Ok(newFileName);
         }
