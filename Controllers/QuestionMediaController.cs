@@ -89,6 +89,8 @@ public class QuestionMediaController : ControllerBase
 
         var mime = GetMimeType(fullPath);
         var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+        if (mediaType == "audio")
+            Console.WriteLine(stream.Length);
         return File(stream, mime);
     }
 

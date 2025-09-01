@@ -9,9 +9,9 @@ namespace PubQuizMediaServer.Util
         private readonly ILogger<QuestionMediaPermissionCache> _logger;
         private readonly IConfiguration _configuration;
 
-        private Dictionary<int, List<int>> _permissions = new();
+        private Dictionary<int, HashSet<int>> _permissions = new();
 
-        public IReadOnlyDictionary<int, List<int>> Permissions => _permissions;
+        public IReadOnlyDictionary<int, HashSet<int>> Permissions => _permissions;
 
         public QuestionMediaPermissionCache(HttpClient httpClient, IConfiguration configuration, ILogger<QuestionMediaPermissionCache> logger)
         {
@@ -67,7 +67,7 @@ namespace PubQuizMediaServer.Util
             {
                 if (!_permissions.TryGetValue(permissionDto.EditionId, out var users))
                 {
-                    users = new List<int>();
+                    users = new HashSet<int>();
                     _permissions[permissionDto.EditionId] = users;
                 }
 
@@ -108,7 +108,7 @@ namespace PubQuizMediaServer.Util
                 {
                     if (!_permissions.TryGetValue(editionId, out var userList))
                     {
-                        userList = new List<int>();
+                        userList = new HashSet<int>();
                         _permissions[editionId] = userList;
                     }
 

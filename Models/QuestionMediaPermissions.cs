@@ -2,6 +2,6 @@
 {
     public class QuestionMediaPermissions
     {
-        public Dictionary<int, List<int>> Permissions { get; set; } = new();
+        public Dictionary<int, HashSet<int>> Permissions { get; set; } = new();
     }
 }
